@@ -8,3 +8,4 @@ class NeuralNet:
         self.imageSize = imageSize
 
     def run(self):
+        

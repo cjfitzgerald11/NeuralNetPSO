@@ -2,7 +2,7 @@ import sys
 from Particle import Particle
 from Function import Function
 from Neighborhood import Neighborhood
-from NeuralNet import NeuralNet
+from Perceptron import Perceptron
 import statistics
 
 class PSO:
