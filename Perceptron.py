@@ -18,7 +18,7 @@ class Perceptron:
         #initialize perceptron to default values (ranodm number between -1 and 1)
         for outputNode in range(self.numOutputNodes):
             for inputNode in range(len(self.inputNodes)):
-                weight = random.uniform(-1.0, 1.0)
+                weight = random.uniform(-0.15, .15)
                 self.setGraphWeight(inputNode,outputNode,weight)
 
     def getGraphWeight(self,inputNode,outputNode):
@@ -32,7 +32,8 @@ class Perceptron:
         if len(activations) == 1:
             activation = activations[0]
             digitEstimate = activation * 10
-            digit = round(digitEstimate,1)
+            digit = round(digitEstimate,0)
+            digit = int(digit)
             return digit
         else:
             maxActivation = 0
@@ -51,7 +52,8 @@ class Perceptron:
             sum = 0
             for inputNode in range(len(self.inputNodes)):
                 weight = self.getGraphWeight(inputNode,outputNode)
-                if inputNode < len(image):
+                isInputNode = self.inputNodes[inputNode]
+                if isInputNode:
                     imageValue = image[inputNode]
                     activation = self.inputNode.activate(imageValue)
                     sum += weight*activation
@@ -68,8 +70,7 @@ class Perceptron:
             activations = self.getActivations(trainImage)
             for activation in activations:
                 if len(activations) == 1:
-                    activation = activation * 10
-                    self.adjustWeight(outputNode, activation, trainAnswer)
+                    self.adjustWeight(outputNode, evaluation, trainAnswer)
                 else:
                     if outputNode == trainAnswer:
                         self.adjustWeight(outputNode, activation, 1)
@@ -78,12 +79,9 @@ class Perceptron:
                 outputNode += 1
 
     def adjustWeight(self,outputNode, solution, answer):
-        err = abs(solution - answer)
-        print("err: ", err)
+        err = answer - solution
         g_prime = self.inputNode.g_prime(solution)
-        print("g_prime: ", g_prime)
-        print("update: ", (err*g_prime*self.learningRate))
         for inputNode in range(len(self.inputNodes)):
             currentWeight = self.getGraphWeight(inputNode,outputNode)
-            updatedWeight = currentWeight - (err*g_prime*self.learningRate)
+            updatedWeight = currentWeight  + (err*g_prime*self.learningRate)
             self.setGraphWeight(inputNode, outputNode,updatedWeight)

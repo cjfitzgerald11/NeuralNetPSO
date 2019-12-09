@@ -11,8 +11,6 @@ class Test:
             testImage = testImages[i]
             testAnswer = testAnswers[i]
             prediction = perceptron.evaluate(testImage)
-            print("prediction: ", prediction)
-            print("answer: ", testAnswer)
             if prediction == testAnswer:
                 numSuccess += 1
         return numSuccess/numTests
