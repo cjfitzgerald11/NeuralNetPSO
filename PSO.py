@@ -2,15 +2,15 @@ import sys
 from Particle import Particle
 from Function import Function
 from Neighborhood import Neighborhood
-from NeuralNet import NeuralNet
+from Perceptron import Perceptron
 import statistics
 
 class PSO:
-    def __init__(self, topology, sizeSwarm, numIterations, funcType, dimension):
+    def __init__(self, topology, sizeSwarm, numIterations, dimension):
         self.topology = topology
         self.sizeSwarm = int(sizeSwarm)
         self.numIterations = int(numIterations)
-        self.funcType = funcType
+        #self.funcType = funcType
         self.function = Function(funcType,int(dimension))
         self.dimension = int(dimension)
         self.globalBestLocation = []

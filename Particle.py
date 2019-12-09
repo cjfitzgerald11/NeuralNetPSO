@@ -1,4 +1,5 @@
 import random
+from Perceptron import Perceptron
 
 class Particle:
     def __init__(self, dimension, function, funcType):
@@ -19,6 +20,7 @@ class Particle:
         self.phi2 = 2.05
         #constriction factor
         self.constrictionFactor = 0.7298
+
 
     def __str__(self):
         return self.location
@@ -68,7 +70,8 @@ class Particle:
 
     #getter method for function value at current position
     def getFunctionValue(self):
-        return self.function.eval(self.location)
+        #return self.function.eval(self.location)
+        return
 
     def updateLocation(self,nhBest):
         pbAc = self.pBestAcceleration()
