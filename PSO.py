@@ -7,8 +7,8 @@ import statistics
 class PSO:
     def __init__(self,dimension,tester,trainTester):
         self.topology = 'ri'
-        self.sizeSwarm = int(2)
-        self.numIterations = int(2)
+        self.sizeSwarm = int(8)
+        self.numIterations = int(10)
         self.dimension = int(dimension)
         self.globalBestLocation = []
         self.globalBestValue = 10000000
@@ -64,6 +64,7 @@ class PSO:
         vals = []
         for i in range(self.numIterations):
             print("i: ", i)
+            print("global best: ", self.globalBestValue)
             self.updateSwarm()
             self.updateGlobalBest()
             if self.minFound():

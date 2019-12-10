@@ -18,5 +18,8 @@ class Test:
         return numSuccess/numTests
 
     def testWeights(self,weights):
-        self.perceptron.updateAllWeights(weights)
-        return self.test(self.perceptron)
+        if len(weights) > 0:
+            self.perceptron.updateAllWeights(weights)
+            return self.test(self.perceptron)
+        else:
+            return 0

@@ -44,7 +44,6 @@ class Neighborhood:
     def getBestLocation(self, neighborhood, curScore, position):
         loBest = curScore
         loBestLocation = position
-        #print("neighbors: ", self.neighbors)
         for neighbor in self.neighbors:
             neighborVal = neighbor.getFunctionValue()
             if neighborVal < loBest:

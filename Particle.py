@@ -1,6 +1,7 @@
 import random
 from Perceptron import Perceptron
 from Test import Test
+import numpy as np
 
 class Particle:
     def __init__(self, dimension,trainTester):
@@ -10,7 +11,7 @@ class Particle:
         #particle velocity
         self.velocity = []
         #personal best found, initialize as current position
-        self.pBest = self.location
+        self.pBest = []
         #personal best acceleration coefficient
         self.phi1 = 2.05
         #global best acceleration coefficient
@@ -105,11 +106,6 @@ class Particle:
 
     def updatePersonalBest(self):
         currentFuncVal = self.getFunctionValue()
-        print("-----------")
-        print("currentFuncVal: ", currentFuncVal)
         pBestFuncVal = self.pBestValue()
-        print("pBestFuncVal: ", pBestFuncVal)
-        print("-----------")
         if currentFuncVal < pBestFuncVal:
-            print("UPDATE")
-            self.pBest = self.location
+            self.pBest = np.array(self.location)
