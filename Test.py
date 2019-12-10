@@ -1,15 +1,19 @@
 from Perceptron import Perceptron
 
 class Test:
-    def test(self,perceptron, testImages,testAnswers):
+    def __init__(self,testImages,testAnswers):
+        self.testImages = testImages
+        self.testAnswers = testAnswers
+
+    def test(self,perceptron):
         print("--------------")
         print("TEST")
         print("--------------")
         numSuccess = 0
-        numTests = len(testImages)
-        for i in range(len(testImages)):
-            testImage = testImages[i]
-            testAnswer = testAnswers[i]
+        numTests = len(self.testImages)
+        for i in range(numTests):
+            testImage = self.testImages[i]
+            testAnswer = self.testAnswers[i]
             prediction = perceptron.evaluate(testImage)
             if prediction == testAnswer:
                 numSuccess += 1

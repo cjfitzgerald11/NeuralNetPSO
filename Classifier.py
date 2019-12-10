@@ -11,23 +11,28 @@ class Classifier:
         self.imageSize = int(imageSize)
         self.numBiasNodes = int(numBiasNodes)
         self.numOuputNodes = int(numOuputNodes)
-        self.Trainer = Train(learningRate)
-        self.Tester = Test()
+        self.Trainer = []
+        self.Tester = []
 
     def run(self):
-        i = 0
+        TrainImages,TrainAnswers,TestImages,TestAnswers = self.getImageSets()
+        self.Trainer = Train(TrainImages,TrainAnswers,self.learningRate)
+        self.Tester = Test(TestImages,TestAnswers)
         #build defulat perceptron
         Percep = Perceptron(self.imageSize**2, self.numBiasNodes,self.numOuputNodes,self.learningRate)
         Percep.init()
+        i = 0
         while i < self.epochs:
+            print("--------")
+            print("epoch: ", i)
+            print("--------")
             Percep,TestResults = self.epoch(Percep)
             print(TestResults)
             i += 1
 
     def epoch(self,perceptron):
-        TrainImages,TrainAnswers,TestImages,TestAnswers = self.getImageSets()
-        TrainedPerceptron = self.Trainer.train(perceptron,TrainImages,TrainAnswers)
-        TestResults = self.Tester.test(TrainedPerceptron,TestImages,TestAnswers)
+        TrainedPerceptron = self.Trainer.train(perceptron)
+        TestResults = self.Tester.test(TrainedPerceptron)
         return TrainedPerceptron,TestResults
 
     def getImageSets(self):
