@@ -6,9 +6,6 @@ class Test:
         self.testAnswers = testAnswers
 
     def test(self,perceptron):
-        print("--------------")
-        print("TEST")
-        print("--------------")
         numSuccess = 0
         numTests = len(self.testImages)
         for i in range(numTests):
