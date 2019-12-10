@@ -85,12 +85,12 @@ class Neighborhood:
         i = 0
         while i < numPart - 1:
             #modulo population of the topology
-            rollover = 0
-            while rollover < width:
-                horizontal = i % width
-                topology[horizontal][rollover] = particles[i]
-                rollover = rollover + 1
-                i = i + 1
+            xPos = 0
+            while xPos < width:
+                yPos = i % width
+                topology[xPos][yPos] = particles[i]
+                xPos++
+                i++
         return (topology, width, height)
 
     """Helper method used to determine a particle's neighbors in Von Neumann

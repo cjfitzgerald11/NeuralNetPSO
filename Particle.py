@@ -69,8 +69,9 @@ class Particle:
         return self.function.eval(self.pBest)
 
     #getter method for function value at current position
-    def getFunctionValue(self):
+    def getFunctionValue(self, perceptron):
         #return self.function.eval(self.location)
+
         return
 
     def updateLocation(self,nhBest):
