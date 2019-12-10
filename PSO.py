@@ -6,7 +6,7 @@ from Perceptron import Perceptron
 import statistics
 
 class PSO:
-    def __init__(self, topology, sizeSwarm, numIterations, dimension):
+    def __init__(self, topology, sizeSwarm, numIterations, dimension, perceptron):
         self.topology = topology
         self.sizeSwarm = int(sizeSwarm)
         self.numIterations = int(numIterations)
@@ -17,12 +17,13 @@ class PSO:
         self.globalBestValue = 10000000
         self.particles = []
         self.NH = Neighborhood(topology,int(dimension))
+        self.perceptron = perceptron
 
     #initialize a swarm of size self.sizeSwarm with randomly located particles
     def buildSwarm(self):
         #build sizeSwarm particles, by defualt they are initialized randomly
         for i in range(self.sizeSwarm):
-            p = Particle(self.dimension,self.function,self.funcType)
+            p = Particle(self.dimension,self.function,self.funcType,self.perceptron)
             p.randomInit()
             self.particles += [p]
         #check for global best

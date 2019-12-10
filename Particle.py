@@ -2,7 +2,7 @@ import random
 from Perceptron import Perceptron
 
 class Particle:
-    def __init__(self, dimension, function, funcType):
+    def __init__(self, dimension, function, perceptron):
         self.dimension = dimension
         #used to initialize starting velocity and position
         self.funcType = funcType
@@ -11,7 +11,8 @@ class Particle:
         #particle velocity
         self.velocity = []
         #personal best found, initialize as current position
-        self.pBest = self.location
+        self.pBestWeights = self.location
+        self.pBestValue = 0
         #evaluation function
         self.function = function
         #personal best acceleration coefficient
@@ -20,6 +21,7 @@ class Particle:
         self.phi2 = 2.05
         #constriction factor
         self.constrictionFactor = 0.7298
+        self.perceptron = perceptron
 
 
     def __str__(self):
@@ -69,9 +71,9 @@ class Particle:
         return self.function.eval(self.pBest)
 
     #getter method for function value at current position
-    def getFunctionValue(self):
+    def getFunctionValue(self, image):
         #return self.function.eval(self.location)
-        return
+        return self.perceptron.evaluate(image)
 
     def updateLocation(self,nhBest):
         pbAc = self.pBestAcceleration()
