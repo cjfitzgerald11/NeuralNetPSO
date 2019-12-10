@@ -1,5 +1,4 @@
 from Perceptron import Perceptron
-from Train import Train
 from Test import Test
 from ImageReader import ImageReader
 import sys
@@ -7,6 +6,7 @@ import time
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.ticker import MaxNLocator
+from PSO import PSO
 
 class Classifier:
     def __init__(self,learningRate, epochs, imageSize,numBiasNodes,numOuputNodes):
@@ -15,36 +15,22 @@ class Classifier:
         self.imageSize = int(imageSize)
         self.numBiasNodes = int(numBiasNodes)
         self.numOuputNodes = int(numOuputNodes)
-        self.Trainer = []
+        self.trainTester = []
         self.Tester = []
         self.testResults = []
         self.runTimes = []
+        self.psoOptimizer = []
 
     def run(self):
         TrainImages,TrainAnswers,TestImages,TestAnswers = self.getImageSets()
-        self.Trainer = Train(TrainImages,TrainAnswers,self.learningRate)
-        self.Tester = Test(TestImages,TestAnswers)
         #build defulat perceptron
         Percep = Perceptron(self.imageSize**2, self.numBiasNodes,self.numOuputNodes,self.learningRate)
         Percep.init()
-        i = 0
-        startTime = time.process_time()
-        while i < self.epochs:
-            print("--------")
-            print("epoch: ", i+1)
-            print("--------")
-            Percep,TestResults = self.epoch(Percep)
-            self.testResults += [TestResults]
-            currentTime = time.process_time() - startTime
-            self.runTimes += [currentTime]
-            print(TestResults)
-            i += 1
-        self.graphResults()
-
-    def epoch(self,perceptron):
-        TrainedPerceptron = self.Trainer.train(perceptron)
-        TestResults = self.Tester.test(TrainedPerceptron)
-        return TrainedPerceptron,TestResults
+        self.Tester = Test(TestImages,TestAnswers,Percep)
+        self.trainTester = Test(TrainImages,TrainAnswers,Percep)
+        dimension = (self.imageSize*self.imageSize + self.numBiasNodes)*self.numOuputNodes
+        self.psoOptimizer = PSO(dimension,self.Tester,self.trainTester)
+        self.psoOptimizer.run()
 
     def getImageSets(self):
         trainFile = "files/train" + str(imageSize) + ".txt"

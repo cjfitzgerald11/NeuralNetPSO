@@ -1,9 +1,10 @@
 from Perceptron import Perceptron
 
 class Test:
-    def __init__(self,testImages,testAnswers):
+    def __init__(self,testImages,testAnswers,perceptron):
         self.testImages = testImages
         self.testAnswers = testAnswers
+        self.perceptron = perceptron
 
     def test(self,perceptron):
         numSuccess = 0
@@ -15,3 +16,7 @@ class Test:
             if prediction == testAnswer:
                 numSuccess += 1
         return numSuccess/numTests
+
+    def testWeights(self,weights):
+        self.perceptron.updateAllWeights(weights)
+        return self.test(self.perceptron)

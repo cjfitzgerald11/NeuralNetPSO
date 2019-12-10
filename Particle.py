@@ -1,25 +1,23 @@
 import random
 from Perceptron import Perceptron
+from Test import Test
 
 class Particle:
-    def __init__(self, dimension, function, funcType):
+    def __init__(self, dimension,trainTester):
         self.dimension = dimension
-        #used to initialize starting velocity and position
-        self.funcType = funcType
         #the location of the particle
         self.location = []
         #particle velocity
         self.velocity = []
         #personal best found, initialize as current position
         self.pBest = self.location
-        #evaluation function
-        self.function = function
         #personal best acceleration coefficient
         self.phi1 = 2.05
         #global best acceleration coefficient
         self.phi2 = 2.05
         #constriction factor
         self.constrictionFactor = 0.7298
+        self.trainTester = trainTester
 
 
     def __str__(self):
@@ -31,25 +29,13 @@ class Particle:
 
     def initPosition(self):
         rng = []
-        rng = (-1.0, 1.0)
-        # if self.funcType == "rok":
-        #     rng = (15.0, 30.0)
-        # elif self.funcType == "ras":
-        #     rng = (16.0, 32.0)
-        # else:
-        #     rng = (2.56, 5.12)
+        rng = (-.15, 0.15)
         for i in range(self.dimension):
             self.location += [random.uniform(*rng)]
 
     def initVelocity(self):
         rng = []
         rng = (-1.0, 1.0)
-        # if self.funcType == "rok":
-        #     rng = (-2.0, 2.0)
-        # elif self.funcType == "ras":
-        #     rng = (-2.0, 4.0)
-        # else:
-        #     rng = (-2.0, 4.0)
         for i in range(self.dimension):
             self.velocity += [random.uniform(*rng)]
 
@@ -66,13 +52,13 @@ class Particle:
         return self.pBest
 
     def pBestValue(self):
-        return self.function.eval(self.pBest)
+        percentCorrect = self.trainTester.testWeights(self.pBest)
+        return 1 - percentCorrect
 
     #getter method for function value at current position
-    def getFunctionValue(self, perceptron):
-        #return self.function.eval(self.location)
-
-        return
+    def getFunctionValue(self):
+        percentCorrect = self.trainTester.testWeights(self.location)
+        return 1 - percentCorrect
 
     def updateLocation(self,nhBest):
         pbAc = self.pBestAcceleration()
@@ -119,6 +105,11 @@ class Particle:
 
     def updatePersonalBest(self):
         currentFuncVal = self.getFunctionValue()
-        pBestFuncVal = self.function.eval(self.pBest)
+        print("-----------")
+        print("currentFuncVal: ", currentFuncVal)
+        pBestFuncVal = self.pBestValue()
+        print("pBestFuncVal: ", pBestFuncVal)
+        print("-----------")
         if currentFuncVal < pBestFuncVal:
+            print("UPDATE")
             self.pBest = self.location

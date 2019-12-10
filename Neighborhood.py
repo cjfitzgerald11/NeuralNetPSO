@@ -89,8 +89,8 @@ class Neighborhood:
             while xPos < width:
                 yPos = i % width
                 topology[xPos][yPos] = particles[i]
-                xPos++
-                i++
+                xPos += 1
+                i += 1
         return (topology, width, height)
 
     """Helper method used to determine a particle's neighbors in Von Neumann
