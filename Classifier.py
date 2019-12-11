@@ -30,7 +30,8 @@ class Classifier:
         self.trainTester = Test(TrainImages,TrainAnswers,Percep)
         dimension = (self.imageSize*self.imageSize + self.numBiasNodes)*self.numOuputNodes
         self.psoOptimizer = PSO(dimension,self.Tester,self.trainTester)
-        self.psoOptimizer.run()
+        formatedOutput, testResults, timeResults = self.psoOptimizer.run()
+        return testResults, timeResults
 
     def getImageSets(self):
         trainFile = "files/train" + str(imageSize) + ".txt"
@@ -70,5 +71,19 @@ imageSize = sys.argv[3]
 numBiasNodes = sys.argv[4]
 numOuputNodes = sys.argv[5]
 
+numRuns = 5
 classify = Classifier(learningRate,epochs,imageSize,numBiasNodes,numOuputNodes)
-classify.run()
+allTestResults = []
+allTimeResults = []
+for i in range(numRuns):
+    print("run: ", i + 1)
+    testResults, timeResults = classify.run()
+    allTestResults += [testResults]
+    allTimeResults += [timeResults]
+
+averageTest = np.mean(allTestResults, axis=0)
+averageTest = [100*result for result in averageTest]
+print("Average Test Success: ", averageTest)
+print("maxValue: ", max(averageTest))
+averateTime = np.mean(allTimeResults, axis=0)
+print("Average Time: ", averateTime)

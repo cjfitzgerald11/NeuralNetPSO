@@ -3,12 +3,13 @@ from Particle import Particle
 from Neighborhood import Neighborhood
 from Perceptron import Perceptron
 import statistics
+import time
 
 class PSO:
     def __init__(self,dimension,tester,trainTester):
         self.topology = 'ri'
         self.sizeSwarm = int(8)
-        self.numIterations = int(10)
+        self.numIterations = int(100)
         self.dimension = int(dimension)
         self.globalBestLocation = []
         self.globalBestValue = 10000000
@@ -62,11 +63,15 @@ class PSO:
     def run(self):
         self.buildSwarm()
         vals = []
+        testResults = []
+        timeResults = []
+        startTime = time.process_time()
         for i in range(self.numIterations):
-            print("i: ", i)
-            print("global best: ", self.globalBestValue)
             self.updateSwarm()
             self.updateGlobalBest()
+            testResults += [self.globalBestValue]
+            currentTime = time.process_time() - startTime
+            timeResults += [currentTime]
             if self.minFound():
                 break
-        return self.formatOutput(i,vals)
+        return self.formatOutput(i,vals), testResults, timeResults
