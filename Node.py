@@ -13,9 +13,15 @@ class Node:
             return self.sigmoid(input)
 
     def sigmoid(self,sum):
-        return 1.0/(1.0 + math.exp(-sum + 0.5))
+        try:
+            return 1.0/(1.0 + math.exp(-sum + 0.5))
+        except:
+            return 0
 
     def g_prime(self,sum):
+        try:
         #g_dot = math.exp(0.5 - activation) / (((math.exp(0.5 - activation)) + 1) ** 2)
-        g_dot = (1 - self.sigmoid(sum)) * self.sigmoid(sum)
-        return g_dot
+            g_dot = (1 - self.sigmoid(sum)) * self.sigmoid(sum)
+            return g_dot
+        except:
+            return 0
