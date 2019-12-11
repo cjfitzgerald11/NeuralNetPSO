@@ -24,21 +24,27 @@ class Particle:
     def __str__(self):
         return self.location
 
-    def randomInit(self):
-        self.initPosition()
-        self.initVelocity()
+    def seedInit(self,weights,radius,velocity):
+        self.initPosition(weights,radius)
+        self.initVelocity(velocity)
 
-    def initPosition(self):
+    def initPosition(self,weights,radius):
         rng = []
-        rng = (-.15, 0.15)
+        rng = (-radius, radius)
         for i in range(self.dimension):
-            self.location += [random.uniform(*rng)]
+            if i == 0 :
+                self.location += [weights[i]]
+            else:
+                self.location += [weights[i] + random.uniform(*rng)]
 
-    def initVelocity(self):
+    def initVelocity(self,velocity):
         rng = []
-        rng = (-1.0, 1.0)
+        rng = (-velocity, velocity)
         for i in range(self.dimension):
-            self.velocity += [random.uniform(*rng)]
+            if i == 0 :
+                self.velocity += [.01]
+            else:
+                self.velocity += [random.uniform(*rng)]
 
     #getter method for location
     def getLocation(self):
