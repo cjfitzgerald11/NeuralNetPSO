@@ -92,7 +92,7 @@ numPSOIterations = sys.argv[5]
 psoSeedRadius = sys.argv[6]
 psoSeedVelocity = sys.argv[7]
 
-numRuns = 2
+numRuns = 1
 classify = Classifier(learningRate,epochs,imageSize,numOuputNodes,numPSOIterations,psoSeedRadius,psoSeedVelocity)
 allTestResults = []
 allTimeResults = []
