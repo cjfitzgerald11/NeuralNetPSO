@@ -31,7 +31,7 @@ class Particle:
     def initPosition(self,weights,radius):
         rng = []
         rng = (-radius, radius)
-        weights = np.flatten(weights)
+        weights = np.array(weights).flatten()
         for i in range(self.dimension):
             if i == 0 :
                 self.location += [weights[i]]
