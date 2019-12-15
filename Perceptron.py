@@ -21,12 +21,16 @@ class Perceptron:
                 weight = random.uniform(-0.15, .15)
                 self.setGraphWeight(inputNode,outputNode,weight)
 
+    """Getter method for the edge weight between two nodes."""
     def getGraphWeight(self,inputNode,outputNode):
         return self.perceptronGraph[inputNode,outputNode]
 
+    """Setter method for the edge weight between two nodes."""
     def setGraphWeight(self,inputNode,outputNode,weight):
         self.perceptronGraph[inputNode,outputNode] = weight
 
+    """Based on the edge activation values, this method evaluates an image and
+    returns the classified digit."""
     def evaluate(self,image):
         activations,sums = self.getActivations(image)
         if len(activations) == 1:
@@ -46,6 +50,8 @@ class Perceptron:
                 i += 1
             return maxIndex
 
+    """Method returns a list of the activation values for all of the edges in
+    the perceptron graph."""
     def getActivations(self,image):
         activations = []
         sums = []
@@ -65,6 +71,8 @@ class Perceptron:
             activations += [self.outputNode.activate(sum)]
         return activations, sums
 
+    """"Trains weights in backprogation manner; compare evaluation with correct
+    answer and then adjusts the weights accordingly."""
     def trainWeights(self,trainImage,trainAnswer):
         evaluation = self.evaluate(trainImage)
         activations,sums = self.getActivations(trainImage)
@@ -79,7 +87,9 @@ class Perceptron:
                 else:
                     self.adjustWeight(outputNode, activation,  sums[outputNode], trainImage, 0)
             outputNode += 1
-            
+
+    """Backpropagation adjustment method; updates all weights in perceptron graph
+    according to their error and the g_prime value."""
     def adjustWeight(self,outputNode, solution, sum, trainImage, answer):
         err = (answer - solution)/10
         g_prime = self.inputNode.g_prime(sum)

@@ -24,10 +24,13 @@ class Particle:
     def __str__(self):
         return self.location
 
+    """Initializes a particle within the seed radius and velocity according to
+    the starting set of weights passed in as a parameter."""
     def seedInit(self,weights,radius,velocity):
         self.initPosition(weights,radius)
         self.initVelocity(velocity)
 
+    """"Initializes a particle's position within the seed radius range."""
     def initPosition(self,weights,radius):
         rng = []
         rng = (-radius, radius)
@@ -38,6 +41,8 @@ class Particle:
             else:
                 self.location += [weights[i] + random.uniform(*rng)]
 
+    """Initializes a velocity vector for the particle within the seed velocity
+    range."""
     def initVelocity(self,velocity):
         rng = []
         rng = (-velocity, velocity)
@@ -47,27 +52,32 @@ class Particle:
             else:
                 self.velocity += [random.uniform(*rng)]
 
-    #getter method for location
+    """Getter method for location."""
     def getLocation(self):
         return self.location
 
-    #setter method for location
+    """Setter method for location."""
     def setLocation(self,location):
         self.location = location
 
-    #getter method for personal best
+    """Getter method for personal best."""
     def pBest(self):
         return self.pBest
 
+    """Returns the personal best value associated with a set of weights in the
+    perceptron graph."""
     def pBestValue(self):
         percentCorrect = self.trainTester.testWeights(self.pBest)
         return 1 - percentCorrect
 
-    #getter method for function value at current position
+    """Getter method for function value at current position."""
     def getFunctionValue(self):
         percentCorrect = self.trainTester.testWeights(self.location)
         return 1 - percentCorrect
 
+
+    """Method that updates the location of a particlce based on the NH best
+    acceleration.""""
     def updateLocation(self,nhBest):
         pbAc = self.pBestAcceleration()
         nbAc = self.nBestAcceleration(nhBest)
@@ -76,7 +86,7 @@ class Particle:
             self.location[i] += self.velocity[i]
         self.updatePersonalBest()
 
-    #compute the acceleration due to personal best
+    """Compute the acceleration due to personal best."""
     def pBestAcceleration(self):
         pbAc = []
         i = 0
@@ -89,7 +99,7 @@ class Particle:
             i += 1
         return pbAc
 
-    #compute the acceleration due to neighborhood best
+    """Compute the acceleration due to neighborhood best."""
     def nBestAcceleration(self,nhBest):
         nbAc = []
         i = 0
@@ -102,15 +112,16 @@ class Particle:
             i += 1
         return nbAc
 
-    #compute the velocity vector given personal best acceleration and
-    #neighborhood best acceleration
-    def updateVelocity(self,pbAc,nbAc):
+    """Compute the velocity vector given personal best acceleration and
+    neighborhood best acceleration."""
+    def updateVelocity(self,persBestAcc,neighBestAcc):
         #constrict the new velocity and reset the current velocity
-        for i in range(len(pbAc)):
-            self.velocity[i] += pbAc[i] + nbAc[i]
+        for i in range(len(persBestAcc)):
+            self.velocity[i] += persBestAcc[i] + neighBestAcc[i]
             #constrict
             self.velocity[i] = self.velocity[i] * self.constrictionFactor
 
+    """Method to update the swarm's personal best set of weights."""
     def updatePersonalBest(self):
         currentFuncVal = self.getFunctionValue()
         pBestFuncVal = self.pBestValue()

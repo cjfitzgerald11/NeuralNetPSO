@@ -5,6 +5,9 @@ class ImageReader:
         self.images = []
         self.answers = []
 
+
+    """Parses and reads an image file into either a 32x32 matrix and its answers
+    or an 8x8 matrix and its answers."""
     def readImages(self):
         #check to make sure images have not yet been initialized
         if len(self.images) == 0:

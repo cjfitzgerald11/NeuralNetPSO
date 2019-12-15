@@ -19,7 +19,7 @@ class PSO:
         self.NH = Neighborhood(self.topology,int(dimension))
         self.trainTeser = trainTester
 
-    #initialize a swarm of size self.sizeSwarm with randomly located particles
+    """Initialize a swarm of size self.sizeSwarm with randomly located particles."""
     def buildSwarm(self,weights):
         #build sizeSwarm particles, by defualt they are initialized randomly
         for i in range(self.sizeSwarm):
@@ -29,24 +29,24 @@ class PSO:
         #check for global best
         self.updateGlobalBest()
 
-    #this method will individiually update partciles based on their personal
-    #best location and their neighborhood best location
+    """This method will individiually update partciles based on their personal
+    best location and their neighborhood best location."""
     def updateSwarm(self):
         for particle in self.particles:
             curIndex = self.particles.index(particle)
             nhBest = self.NH.getBestNeighbor(self.particles,particle.getFunctionValue(),particle.getLocation(),curIndex)
             particle.updateLocation(nhBest)
 
-    #check to see if terminantion condition is met (found 0.0 function value)
+    """Check to see if terminantion condition is met (found 0.0 function value)."""
     def minFound(self):
         if self.globalBestValue == 0.0:
             return True
         else:
             return False
 
-    #this funciton will format the output of the program,
-    #returning the minimum value found and the location of the
-    #minimum value
+    """This funciton will format the output of the program,
+    returning the minimum value found and the location of the
+    minimum value."""
     def formatOutput(self, numIterations, values):
         return {"val" :  self.globalBestValue, "location" : self.globalBestLocation, "iterations" : numIterations, "intervalValues": values}
 
@@ -57,10 +57,10 @@ class PSO:
                 self.globalBestValue = particle.pBestValue()
                 self.globalBestLocation = particle.pBest
 
-    #this function will run numIterations of the PSO algorithm and print
-    #the minimum value found and the minimum location after the iterations.
-    #Also if a 0.0 value is found it will break out of the loop and return
-    #the location
+    """This function will run numIterations of the PSO algorithm and print
+    the minimum value found and the minimum location after the iterations.
+    Also if a 0.0 value is found it will break out of the loop and return
+    the location."""
     def run(self):
         for i in range(self.numIterations):
             self.updateSwarm()

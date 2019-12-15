@@ -6,6 +6,8 @@ class Test:
         self.testAnswers = testAnswers
         self.perceptron = perceptron
 
+    """Test method that returns the percentage of correct evaluations that a
+    perceptron made during that epoch."""
     def test(self,perceptron):
         numSuccess = 0
         numTests = len(self.testImages)
@@ -17,6 +19,9 @@ class Test:
                 numSuccess += 1
         return numSuccess/numTests
 
+
+    """Method used in PSO training that updates all weights and uses the above
+    method to test this set of weights."""
     def testWeights(self,weights):
         if len(weights) > 0:
             self.perceptron.updateAllWeights(weights)
