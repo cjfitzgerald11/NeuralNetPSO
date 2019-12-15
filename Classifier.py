@@ -22,7 +22,8 @@ class Classifier:
         self.PSOSeedRadius = float(psoSeedRadius)
         self.psoSeedVelocity = float(psoSeedVelocity)
 
-
+    """Main method that runs the Perceptron-PSO hybrid algorithm. Initializes a
+    Perceptron, trains the Perceptron, and tests it against known dataset."""
     def run(self):
         TrainImages,TrainAnswers,TestImages,TestAnswers = self.getImageSets()
         #build defulat perceptron
@@ -44,6 +45,8 @@ class Classifier:
             i += 1
         return  self.testResults,self.runTimes
 
+    """Helper method that runs all of the processes that happen for a given
+    epoch--backpropagation training, PSO training, weight updates, and testing."""
     def epoch(self,perceptron,dimension,trainTester,trainer,tester):
         trainedPerceptron = trainer.trainBackProp(perceptron)
         trainedWeights = trainedPerceptron.perceptronGraph
@@ -52,6 +55,8 @@ class Classifier:
         TestResults = tester.test(trainedPerceptron)
         return trainedPerceptron,TestResults
 
+    """Helper method used to get the train and test images in addition to their
+    answers. Returns a tuple with these four values."""
     def getImageSets(self):
         trainFile = "files/train" + str(imageSize) + ".txt"
         testFile = "files/test" + str(imageSize) + ".txt"
@@ -64,6 +69,8 @@ class Classifier:
         TestImages,TestAnswers = TestReader.getImages()
         return TrainImages,TrainAnswers,TestImages,TestAnswers
 
+
+    """Helper method that graphs the results from a specific test."""
     def graphResults(self):
         #make test results percents
         testResults = [100*result for result in self.testResults]
