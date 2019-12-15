@@ -7,32 +7,56 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.ticker import MaxNLocator
 from PSO import PSO
+from Train import Train
 
 class Classifier:
-    def __init__(self,learningRate, epochs, imageSize,numBiasNodes,numOuputNodes):
+    def __init__(self,learningRate, epochs, imageSize,numOuputNodes,numPSOIterations,psoSeedRadius,psoSeedVelocity):
         self.learningRate = float(learningRate)
         self.epochs = int(epochs)
         self.imageSize = int(imageSize)
-        self.numBiasNodes = int(numBiasNodes)
         self.numOuputNodes = int(numOuputNodes)
-        self.trainTester = []
-        self.Tester = []
+        self.numBiasNodes = 0
         self.testResults = []
         self.runTimes = []
-        self.psoOptimizer = []
+        self.numPSOIterations = int(numPSOIterations)
+        self.PSOSeedRadius = float(psoSeedRadius)
+        self.psoSeedVelocity = float(psoSeedVelocity)
 
+    """Main method that runs the Perceptron-PSO hybrid algorithm. Initializes a
+    Perceptron, trains the Perceptron, and tests it against known dataset."""
     def run(self):
         TrainImages,TrainAnswers,TestImages,TestAnswers = self.getImageSets()
         #build defulat perceptron
         Percep = Perceptron(self.imageSize**2, self.numBiasNodes,self.numOuputNodes,self.learningRate)
         Percep.init()
-        self.Tester = Test(TestImages,TestAnswers,Percep)
-        self.trainTester = Test(TrainImages,TrainAnswers,Percep)
+        Tester = Test(TestImages,TestAnswers,Percep)
+        trainTester = Test(TrainImages,TrainAnswers,Percep)
         dimension = (self.imageSize*self.imageSize + self.numBiasNodes)*self.numOuputNodes
-        self.psoOptimizer = PSO(dimension,self.Tester,self.trainTester)
-        formatedOutput, testResults, timeResults = self.psoOptimizer.run()
-        return testResults, timeResults
+        trainer = Train( TrainImages,TrainAnswers, self.learningRate,self.numPSOIterations,self.PSOSeedRadius,self.psoSeedVelocity)
+        self.testResults = []
+        self.runTimes = []
+        startTime = time.process_time()
+        i = 0
+        while i < self.epochs:
+            Percep,TestResults = self.epoch(Percep,dimension,trainTester,trainer,Tester)
+            self.testResults += [TestResults]
+            currentTime = time.process_time() - startTime
+            self.runTimes += [currentTime]
+            i += 1
+        return  self.testResults,self.runTimes
 
+    """Helper method that runs all of the processes that happen for a given
+    epoch--backpropagation training, PSO training, weight updates, and testing."""
+    def epoch(self,perceptron,dimension,trainTester,trainer,tester):
+        trainedPerceptron = trainer.trainBackProp(perceptron)
+        trainedWeights = trainedPerceptron.perceptronGraph
+        psoTrainedWeights = trainer.trainPSO(dimension,trainTester,trainedWeights,self.PSOSeedRadius)
+        trainedPerceptron.updateAllWeights(psoTrainedWeights)
+        TestResults = tester.test(trainedPerceptron)
+        return trainedPerceptron,TestResults
+
+    """Helper method used to get the train and test images in addition to their
+    answers. Returns a tuple with these four values."""
     def getImageSets(self):
         trainFile = "files/train" + str(imageSize) + ".txt"
         testFile = "files/test" + str(imageSize) + ".txt"
@@ -45,6 +69,8 @@ class Classifier:
         TestImages,TestAnswers = TestReader.getImages()
         return TrainImages,TrainAnswers,TestImages,TestAnswers
 
+
+    """Helper method that graphs the results from a specific test."""
     def graphResults(self):
         #make test results percents
         testResults = [100*result for result in self.testResults]
@@ -68,11 +94,13 @@ class Classifier:
 learningRate = sys.argv[1]
 epochs = sys.argv[2]
 imageSize = sys.argv[3]
-numBiasNodes = sys.argv[4]
-numOuputNodes = sys.argv[5]
+numOuputNodes = sys.argv[4]
+numPSOIterations = sys.argv[5]
+psoSeedRadius = sys.argv[6]
+psoSeedVelocity = sys.argv[7]
 
-numRuns = 5
-classify = Classifier(learningRate,epochs,imageSize,numBiasNodes,numOuputNodes)
+numRuns = 1
+classify = Classifier(learningRate,epochs,imageSize,numOuputNodes,numPSOIterations,psoSeedRadius,psoSeedVelocity)
 allTestResults = []
 allTimeResults = []
 for i in range(numRuns):
